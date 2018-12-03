@@ -1,0 +1,7 @@
+#main_container {
+    width: 900px;
+    margin: auto;
+    background: lightgrey;
+    height: 600px;
+    margin-top: 10px;
+}
