@@ -1,0 +1,11 @@
+.main_container {
+    width: 90%;
+    margin: auto;
+    background: lightgrey;
+    overflow: hidden;
+}
+.clearfix::after {
+    content: '';
+    clear: both;
+    display: table;
+}
