@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JS-Excersises</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="./scripts/script7.js"></script>
+</head>
+<body>
+  <h1>Open the Console &darr;</h1>
+  <pre>
+Q. Normalization using reduce function:
+  - Refer this: https://gist.github.com/sudhirt4/18e67bd68fb771f465a8cab9758ad6f0
+
+  /* Write a function such that it takes list of people with nested children and normalizes it as shown in example */
+
+    var people = [{
+      id: 1,
+      name: "Aegon Targaryen",
+      children: [{
+        id: 2,
+        name: "Jaehaerys Targaryen",
+        children: [{
+          id: 4,
+          name: "Daenerys Targaryen"
+        },{
+          id: 5,
+          name: "Rhaegar Targaryen",
+          children: [{
+            id: 6,
+            name: "Aegon Targaryen"
+          }]
+        }]
+      },{
+        id: 3,
+        name: "Rhaelle Targaryen"
+      }],
+    }];
+
+    var output = {
+      1: {
+        id: 1,
+        name: "Aegon Targaryen",
+        children: [2, 3]
+      },
+      2: {
+        id: 2,
+        name: "Jaehaerys Targaryen",
+        children: [4, 5]
+      },
+      3: {
+        id: 3,
+        name: "Rhaelle Targaryen",
+        children: []
+      },
+      4: {
+        id: 4,
+        name: "Daenerys Targaryen",
+        children: []
+      },
+      5: {
+        id: 5,
+        name: "Rhaegar Targaryen",
+        children: [6]
+      },
+      6: {
+        id: 6,
+        name: "Aegon Targaryen",
+        children: []
+      }
+    }
+  </pre>
+</body>
+</html>
