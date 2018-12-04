@@ -2,14 +2,14 @@
 
   var mainContainer = document.getElementById('main_container');
   mainContainer.style.position = 'relative';
-  var NUMBER_OF_BALLS = 10;
+  var NUMBER_OF_BALLS = 30;
   var ballArr = [];
-  var BALL_SPEED = 2; //pixels to increase at each interval
-  var INTERVAL_SPEED = 10; //interval for setInterval. can be used to control sp
+  var BALL_SPEED = 1; //pixels to increase at each interval
+  var INTERVAL_SPEED = 4; //interval for setInterval. can be used to control speed
   var CONTAINER_HEIGHT = 600;
   var CONTAINER_WIDTH = 900;
-  var MAX_BALL_SIZE = 100; //max diameter
-  var MIN_BALL_SIZE = 50; //min diameter
+  var MAX_BALL_SIZE = 50; //max diameter
+  var MIN_BALL_SIZE = 25; //min diameter
 
   var getRandomInt = function(max, min) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -29,7 +29,7 @@
     return color;
   };
 
-  function Ball() {
+  function Ball(ballSize, positionX, positionY, speed, color, directionX, directionY) {
     var that = this;
     this.ballSize = getRandomInt(MAX_BALL_SIZE, MIN_BALL_SIZE); //diameter
     this.positionX = getRandomInt(CONTAINER_WIDTH - this.ballSize, 0);
@@ -79,44 +79,74 @@
       this.detectWallCollision();
       this.detectBallCollision();
     };
+    this.remove = function() {
+      mainContainer.removeChild(this.newDiv);
+    };
 
     this.detectBallCollision = function() {
       for (var i = 0; i < NUMBER_OF_BALLS; i++) {
+        if(ballArr[i]) {
+          var ball1 = this;
+          var ball2 = ballArr[i];
 
-        var ball1 = this;
-        var ball2 = ballArr[i];
+          if (i != ballArr.indexOf(ball1)) {
 
-        if (i != ballArr.indexOf(ball1)) {
+            //using box collision condition instead of ball collision for less calculations
+            if (ball1.positionX < ball2.positionX + ball2.ballSize &&
+              ball1.positionX + ball1.ballSize > ball2.positionX &&
+              ball1.positionY < ball2.positionY + ball2.ballSize &&
+              ball1.ballSize + ball1.positionY > ball2.positionY) {
 
-          var dx = ball1.positionX - ball2.positionX;
-          var dy = ball1.positionY - ball2.positionY;
+            //ball collision conditions, requires square root calculations
+            // var dx = ball1.positionX - ball2.positionX;
+            // var dy = ball1.positionY - ball2.positionY;
+            //
+            // var distance = Math.sqrt(dx * dx + dy * dy);
+            // var expectedDistance = ((ball1.ballSize / 2) + (ball2.ballSize / 2));
+            //
+            // if (distance <= expectedDistance) {
+              //swap directions
+              var tempX, tempY;
+              tempX = ball1.directionX;
+              tempY = ball1.directionY;
 
-          var distance = Math.sqrt(dx * dx + dy * dy);
-          var expectedDistance = ((ball1.ballSize / 2) + (ball2.ballSize / 2));
+              ball1.directionX = ball2.directionX;
+              ball1.directionY = ball2.directionY;
 
-          if (distance <= expectedDistance) {
-            //swap directions
-            var tempX, tempY;
-            tempX = ball1.directionX;
-            tempY = ball1.directionY;
-
-            ball1.directionX = ball2.directionX;
-            ball1.directionY = ball2.directionY;
-
-            ball2.directionX = tempX;
-            ball2.directionY = tempY;
+              ball2.directionX = tempX;
+              ball2.directionY = tempY;
+              return true;
+            }
           }
         }
       }
+      return false;
     };
   }
   var init = function() {
     console.log('init');
+    var newBall;
     for (var i = 0; i < NUMBER_OF_BALLS; i++) {
-      var newBall = new Ball();
-      newBall.draw();
-      newBall.move();
-      ballArr[i] = newBall;
+      do {
+        if (ballArr.length > i) {
+          ballArr[i].remove();
+        }
+        var positionX = getRandomInt(CONTAINER_WIDTH - this.ballSize, 0);
+        var positionY = getRandomInt(CONTAINER_HEIGHT - this.ballSize, 0);
+        var ballSize = getRandomInt(MAX_BALL_SIZE, MIN_BALL_SIZE); //diameter
+        var speed = BALL_SPEED;
+        var color = getRandomColor();
+        var directionX = getRandomDirection();
+        var directionY = getRandomDirection();
+        if (directionX == 0 && directionY == 0) { // initially, no movement condition
+          directionX = 1;
+          directionY = 1;
+        }
+        newBall = new Ball(ballSize, positionX, positionY, speed, color, directionX, directionY);
+        ballArr[i] = newBall;
+        ballArr[i].draw();
+      } while (newBall.detectBallCollision());
+      ballArr[i].move();
     }
   };
 
