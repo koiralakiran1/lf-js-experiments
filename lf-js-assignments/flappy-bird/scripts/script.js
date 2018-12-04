@@ -13,6 +13,12 @@
 
   var gameThat = this;
 
+  var moveUpInterval;
+  var moveDownInterval;
+  var moveBackgroundInterval;
+  var createPipesInterval;
+  var movePipeInterval;
+
   var topBackground = document.getElementById('top-background');
   var floorBackground = document.getElementById('floor-background');
   var mainContainer = document.getElementsByClassName('main_container');
@@ -21,9 +27,7 @@
   var newBird = new Bird();
   // newBird.initializeBird();
 
-  var clickCounter = 0;
-  mainContainer[0].addEventListener('click', function() {
-    // console.log('do sth');
+  this.onClickFunction = function() {
     if (clickCounter == 0) {
       newBird.moveDown();
       initiatePipes();
@@ -32,7 +36,10 @@
     } else {
       newBird.moveUp();
     }
-  });
+  };
+
+  var clickCounter = 0;
+  mainContainer[0].addEventListener('click', onClickFunction);
 
   this.getRandomInt = function(max, min) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -40,7 +47,7 @@
   this.pipeArr = [];
 
   gameThat.initiatePipes = function() {
-    var createPipes = setInterval(function() {
+    createPipesInterval = setInterval(function() {
       var newPipe = new Pipe();
       newPipe.draw();
       pipeArr.push(newPipe);
@@ -48,7 +55,7 @@
   };
 
   this.movePipe = function() {
-    var movePipeInterval = setInterval(function() {
+    movePipeInterval = setInterval(function() {
       gameThat.pipeArr.forEach(function(pipe) {
         pipe.updatePipePosition();
         //distance between pipes = (2000/10) * 2(updated Pixels) = 400;
@@ -60,10 +67,6 @@
       });
     }, 10);
   };
-
-  // setInterval(function() {
-  //   console.log(gameThat.pipeArr[0].newTopPipeDiv.style.right);
-  // }, 2000);
 
   this.initiateBackground = function() {
     topBackground.style.height = TOP_HEIGHT + 'px';
@@ -81,7 +84,7 @@
     topBackground.style.position = 'relative';
     (function moveBackground() {
       var x = 0;
-      setInterval(function() {
+      moveBackgroundInterval = setInterval(function() {
         x -= 1;
         floorBackground.style.backgroundPosition = x + 'px 0';
         topBackground.style.backgroundPosition = x + 'px 0';
@@ -121,7 +124,7 @@
     })();
 
     this.moveDown = function() {
-      var moveDownInterval = setInterval(function() {
+      moveDownInterval = setInterval(function() {
         birdDiv.style.top = parseInt(birdDiv.style.top) + 8 + 'px';
         birdThis.birdPositionY = parseInt(birdDiv.style.top);
         birdThis.detectBirdCollision();
@@ -129,7 +132,7 @@
     };
     this.moveUp = function() {
       //moves 27*5 pixels
-      var moveUpInterval = setInterval(function() {
+      moveUpInterval = setInterval(function() {
         birdDiv.style.top = parseInt(birdDiv.style.top) - 5 + 'px';
         birdThis.birdPositionY = parseInt(birdDiv.style.top);
         birdThis.detectBirdCollision();
@@ -143,29 +146,17 @@
 
     this.detectBirdCollision = function() {
       for (var i = 0; i < 4; i++) {
-        //(1300-pipeArr[i].positionX-103 <= newBird.birdPositionX <= 1300-pipeArr[i].positionX)
-        // 0<=newBird.birdPositionY<=pipeArr[i].heightTop || 500-pipeArr[i].heightBottom<=newBird.birdPositionY<=500
-
-        // if (gameThat.pipeArr.length >= 5) {
-        //   if ((1300 - gameThat.pipeArr[i].positionX - 103 <= newBird.birdPositionX + newBird.birdWidth && newBird.birdPositionX + newBird.birdWidth <= 1300 - gameThat.pipeArr[i].positionX) &&
-        //     ((0 <= newBird.birdPositionY && newBird.birdPositionY <= gameThat.pipeArr[i].heightTop) ||
-        //       (500 - gameThat.pipeArr[i].heightBottom <= newBird.positionY + newBird.birdHeight && newBird.birdPositionY + newBird.birdHeight <= 500))) {
-        //     console.log('collision');
-        //   }
-        // }
-        //      for(var i=0;i<pipeArray.length;i++){
-        //     if(that.x+that.width>=pipeArray[i].x && that.x<=pipeArray[i].x+pipeArray[i].width){
-        //       if(that.y<=pipeArray[i].heightTop || that.y+that.height>=pipeArray[i].yBottom){
-        //         clearInterval(interval);
-        //         clearInterval(pipeInterval);
-        //       }
-        //     }
-        // }
         if (gameThat.pipeArr.length >= 4) {
           if (newBird.birdPositionX + newBird.birdWidth >= 1300 - gameThat.pipeArr[i].positionX - 103 && newBird.birdPositionX <= 1300 - gameThat.pipeArr[i].positionX) {
-            console.log('x collision');
+            // console.log('x collision');
             if (newBird.birdPositionY <= gameThat.pipeArr[i].heightTop || newBird.birdPositionY + newBird.birdHeight >= gameThat.pipeArr[i].heightTop + PIPE_GAP) {
-              console.log('y collision');
+              // console.log('y collision');
+              clearInterval(moveUpInterval);
+              clearInterval(moveDownInterval);
+              clearInterval(moveBackgroundInterval);
+              clearInterval(createPipesInterval);
+              clearInterval(movePipeInterval);
+              mainContainer[0].removeEventListener('click', gameThat.onClickFunction);
             }
           }
         }
