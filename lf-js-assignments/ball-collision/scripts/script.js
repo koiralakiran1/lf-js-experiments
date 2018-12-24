@@ -2,7 +2,7 @@
 
   var mainContainer = document.getElementById('main_container');
   mainContainer.style.position = 'relative';
-  var NUMBER_OF_BALLS = 30;
+  var NUMBER_OF_BALLS = 10;
   var ballArr = [];
   var BALL_SPEED = 1; //pixels to increase at each interval
   var INTERVAL_SPEED = 4; //interval for setInterval. can be used to control speed
@@ -92,20 +92,20 @@
           if (i != ballArr.indexOf(ball1)) {
 
             //using box collision condition instead of ball collision for less calculations
-            if (ball1.positionX < ball2.positionX + ball2.ballSize &&
-              ball1.positionX + ball1.ballSize > ball2.positionX &&
-              ball1.positionY < ball2.positionY + ball2.ballSize &&
-              ball1.ballSize + ball1.positionY > ball2.positionY) {
+            // if (ball1.positionX < ball2.positionX + ball2.ballSize &&
+            //   ball1.positionX + ball1.ballSize > ball2.positionX &&
+            //   ball1.positionY < ball2.positionY + ball2.ballSize &&
+            //   ball1.ballSize + ball1.positionY > ball2.positionY) {
 
-            //ball collision conditions, requires square root calculations
-            // var dx = ball1.positionX - ball2.positionX;
-            // var dy = ball1.positionY - ball2.positionY;
-            //
-            // var distance = Math.sqrt(dx * dx + dy * dy);
-            // var expectedDistance = ((ball1.ballSize / 2) + (ball2.ballSize / 2));
-            //
-            // if (distance <= expectedDistance) {
-              //swap directions
+            // ball collision conditions, requires square root calculations
+            var dx = ball1.positionX - ball2.positionX;
+            var dy = ball1.positionY - ball2.positionY;
+
+            var distance = Math.sqrt(dx * dx + dy * dy);
+            var expectedDistance = ((ball1.ballSize / 2) + (ball2.ballSize / 2));
+
+            if (distance <= expectedDistance) {
+              // swap directions
               var tempX, tempY;
               tempX = ball1.directionX;
               tempY = ball1.directionY;

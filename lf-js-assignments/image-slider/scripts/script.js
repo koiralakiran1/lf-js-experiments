@@ -2,8 +2,8 @@ var slider, imageContainer, images, mar;
 var slideImage;
 var pauseAndStartAnimation, startAnimation;
 var leftArrow, rightArrow;
-var SLIDER_WIDTH = 300;
-var SLIDER_HEIGHT = 300;
+var SLIDER_WIDTH = 600;
+var SLIDER_HEIGHT = 600;
 (function initializeAndStyleElements() {
   // mainContainer = document.getElementById('main_container');
   // mainContainer.style.overflow = 'hidden';
@@ -14,7 +14,7 @@ var SLIDER_HEIGHT = 300;
   mar = 0;
 
 
-  console.log(images);
+  // console.log(images);
   for (var i = 0; i < images.length; i++) {
     images[i].setAttribute('id', 'image' + i);
     images[i].style.float = 'left';
@@ -68,26 +68,26 @@ var SLIDER_HEIGHT = 300;
 })();
 
 var onClickedMargin;
-leftArrow.addEventListener('click', function() {
-  clearInterval(slideImage);
-  onClickedMargin = -mar;
-  console.log(onClickedMargin);
-  mar = mar - mar % SLIDER_WIDTH;
-  changeMargin();
-  animate();
-});
-
-rightArrow.addEventListener('click', function() {
-  //next image
-  clearInterval(slideImage);
-
-  onClickedMargin = -mar;
-  console.log(onClickedMargin);
-  mar = mar + (SLIDER_WIDTH - mar % SLIDER_WIDTH);
-  mar = -mar;
-  changeMargin();
-  animate();
-});
+// leftArrow.addEventListener('click', function() {
+//   clearInterval(slideImage);
+//   onClickedMargin = -mar;
+//   console.log(onClickedMargin);
+//   mar = mar - mar % SLIDER_WIDTH;
+//   changeMargin();
+//   animate();
+// });
+//
+// rightArrow.addEventListener('click', function() {
+//   //next image
+//   clearInterval(slideImage);
+//
+//   onClickedMargin = -mar;
+//   console.log(onClickedMargin);
+//   mar = mar + (SLIDER_WIDTH - mar % SLIDER_WIDTH);
+//   mar = -mar;
+//   changeMargin();
+//   animate();
+// });
 
 
 function changeMargin() {
