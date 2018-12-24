@@ -18,10 +18,10 @@ var SLIDER_HEIGHT = 300;
   for (var i = 0; i < images.length; i++) {
     images[i].setAttribute('id', 'image' + i);
     images[i].style.float = 'left';
-    images[i].style.width = 'SLIDER_WIDTHpx';
+    images[i].style.width = SLIDER_WIDTH + 'px';
   }
 
-  slider.style.width = 'SLIDER_WIDTHpx';
+  slider.style.width = SLIDER_WIDTH + 'px';
   slider.setAttribute('class', 'clearfix');
   slider.style.border = '2px solid red';
   slider.style.margin = 'auto';
