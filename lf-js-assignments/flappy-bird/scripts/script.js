@@ -18,6 +18,7 @@
   var moveBackgroundInterval;
   var createPipesInterval;
   var movePipeInterval;
+  var score = 0;
 
   var topBackground = document.getElementById('top-background');
   var floorBackground = document.getElementById('floor-background');
@@ -125,24 +126,32 @@
 
     this.moveDown = function() {
       moveDownInterval = setInterval(function() {
-        birdDiv.style.top = parseInt(birdDiv.style.top) + 8 + 'px';
+        birdDiv.style.top = parseInt(birdDiv.style.top) + 6 + 'px';
         birdThis.birdPositionY = parseInt(birdDiv.style.top);
         birdThis.detectBirdCollision();
+        birdThis.detectTopBotCollision();
       }, 30);
     };
     this.moveUp = function() {
-      //moves 27*5 pixels
+      //moves 24*5 pixels
       moveUpInterval = setInterval(function() {
-        birdDiv.style.top = parseInt(birdDiv.style.top) - 5 + 'px';
+        birdDiv.style.top = parseInt(birdDiv.style.top) - 3 + 'px';
         birdThis.birdPositionY = parseInt(birdDiv.style.top);
         birdThis.detectBirdCollision();
-
+        birdThis.detectTopBotCollision();
       }, 5);
       setTimeout(function() {
         clearInterval(moveUpInterval);
-      }, 135);
+      }, 120);
     };
-
+    this.endGame = function() {
+      clearInterval(moveUpInterval);
+      clearInterval(moveDownInterval);
+      clearInterval(moveBackgroundInterval);
+      clearInterval(createPipesInterval);
+      clearInterval(movePipeInterval);
+      mainContainer[0].removeEventListener('click', gameThat.onClickFunction);
+    };
 
     this.detectBirdCollision = function() {
       for (var i = 0; i < 4; i++) {
@@ -151,16 +160,25 @@
             // console.log('x collision');
             if (newBird.birdPositionY <= gameThat.pipeArr[i].heightTop || newBird.birdPositionY + newBird.birdHeight >= gameThat.pipeArr[i].heightTop + PIPE_GAP) {
               // console.log('y collision');
-              clearInterval(moveUpInterval);
-              clearInterval(moveDownInterval);
-              clearInterval(moveBackgroundInterval);
-              clearInterval(createPipesInterval);
-              clearInterval(movePipeInterval);
-              mainContainer[0].removeEventListener('click', gameThat.onClickFunction);
+              birdThis.endGame();
             }
+          }
+          if(1300 - gameThat.pipeArr[i].positionX == 100) {
+            score++;
+            console.log(score);
+            break;
           }
         }
 
+      }
+    };
+    this.detectTopBotCollision = function() {
+      if(newBird.birdPositionY + newBird.birdHeight >= CONTAINER_HEIGHT-FLOOR_HEIGHT) {
+        birdThis.endGame();
+      }
+      if(newBird.birdPositionY <= 0) {
+        birdDiv.style.top = parseInt(birdDiv.style.top) + 20 + 'px';
+        birdThis.birdPositionY = parseInt(birdDiv.style.top);
       }
     };
 
